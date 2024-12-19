@@ -1,14 +1,13 @@
-package any
+package all
 
 import (
 	"reflect"
 )
 
-// CopySlice converts a slice or array to a slice of T.
-// If a is not an addressable item, it will panic.
+// ConvertSlice converts a slice of values to a slice of T.
 // This will only work if T is an interface{} type,
 // or if i contains interfaces to T.
-func CopySlice[T any](i any) (o []T) {
+func ConvertSlice[T, K any](i []K) (o []T) {
 	if i == nil {
 		return
 	}

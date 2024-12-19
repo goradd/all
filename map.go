@@ -1,15 +1,15 @@
-package any
+package all
 
 import (
+	"cmp"
 	"fmt"
-	"golang.org/x/exp/constraints"
 	"slices"
 )
 
 // StringMap converts a map[K]any to a map[K]string.
 // It will attempt to cast to a string, and if that fails, will
 // use fmt.Print to do the conversion to string.
-func StringMap[K constraints.Ordered](m map[K]any) (o map[K]string) {
+func StringMap[K cmp.Ordered](m map[K]any) (o map[K]string) {
 	o = make(map[K]string, len(m))
 	for k, v := range m {
 		if s, ok := v.(string); ok {
@@ -22,7 +22,7 @@ func StringMap[K constraints.Ordered](m map[K]any) (o map[K]string) {
 }
 
 // Map converts a map[K]V to a map[K]any.
-func Map[K constraints.Ordered, V any](m map[K]V) (o map[K]any) {
+func Map[K cmp.Ordered, V any](m map[K]V) (o map[K]any) {
 	o = make(map[K]any, len(m))
 	for k, v := range m {
 		o[k] = v
@@ -32,7 +32,7 @@ func Map[K constraints.Ordered, V any](m map[K]V) (o map[K]any) {
 
 // SortedKeys returns the keys of a map in sort order.
 // The keys must be sortable, of course.
-func SortedKeys[K constraints.Ordered, V any](m map[K]V) []K {
+func SortedKeys[K cmp.Ordered, V any](m map[K]V) []K {
 	keys := make([]K, len(m), len(m))
 	idx := 0
 	for k := range m {
