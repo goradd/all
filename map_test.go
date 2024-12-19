@@ -39,3 +39,42 @@ func TestMap(t *testing.T) {
 		})
 	}
 }
+
+func TestSortedKeys(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    map[string]int
+		expected []string
+	}{
+		{
+			name:     "Empty Map",
+			input:    map[string]int{},
+			expected: []string{},
+		},
+		{
+			name: "Single Element",
+			input: map[string]int{
+				"a": 1,
+			},
+			expected: []string{"a"},
+		},
+		{
+			name: "Multiple Elements",
+			input: map[string]int{
+				"b": 2,
+				"a": 45,
+				"c": 3,
+			},
+			expected: []string{"a", "b", "c"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := SortedKeys(tt.input)
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("SortedKeys(%v) = %v; want %v", tt.input, result, tt.expected)
+			}
+		})
+	}
+}
