@@ -3,6 +3,7 @@ package any
 import (
 	"fmt"
 	"golang.org/x/exp/constraints"
+	"slices"
 )
 
 // StringMap converts a map[K]any to a map[K]string.
@@ -27,4 +28,17 @@ func Map[K constraints.Ordered, V any](m map[K]V) (o map[K]any) {
 		o[k] = v
 	}
 	return
+}
+
+// SortedKeys returns the keys of a map in sort order.
+// The keys must be sortable, of course.
+func SortedKeys[K constraints.Ordered, V any](m map[K]V) []K {
+	keys := make([]K, len(m), len(m))
+	idx := 0
+	for k := range m {
+		keys[idx] = k
+		idx++
+	}
+	slices.Sort(keys)
+	return keys
 }
