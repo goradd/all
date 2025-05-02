@@ -33,7 +33,7 @@ func TestMap(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotO := Map(tt.m); !reflect.DeepEqual(gotO, tt.wantO) {
+			if gotO := AnyMap(tt.m); !reflect.DeepEqual(gotO, tt.wantO) {
 				t.Errorf("MapToAny() = %v, want %v", gotO, tt.wantO)
 			}
 		})
@@ -47,7 +47,7 @@ func TestSortedKeys(t *testing.T) {
 		expected []string
 	}{
 		{
-			name:     "Empty Map",
+			name:     "Empty AnyMap",
 			input:    map[string]int{},
 			expected: []string{},
 		},

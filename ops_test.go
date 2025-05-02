@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestIf(t *testing.T) {
@@ -52,4 +53,61 @@ func TestIsNil(t *testing.T) {
 func TestZero(t *testing.T) {
 	assert.Equal(t, "", Zero[string]())
 	assert.Equal(t, 0, Zero[int]())
+	assert.True(t, Zero[time.Time]().IsZero())
+}
+
+func TestIsInteger(t *testing.T) {
+	tests := []struct {
+		name  string
+		input interface{}
+		want  bool
+	}{
+		{"int", int(1), true},
+		{"int8", int8(1), true},
+		{"int16", int16(1), true},
+		{"int32", int32(1), true},
+		{"int64", int64(1), true},
+		{"uint", uint(1), true},
+		{"uint8", uint8(1), true},
+		{"uint16", uint16(1), true},
+		{"uint32", uint32(1), true},
+		{"uint64", uint64(1), true},
+		{"string", "hello", false},
+		{"float64", float64(1.0), false},
+		{"bool", true, false},
+		{"nil", nil, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := IsInteger(tt.input)
+			if got != tt.want {
+				t.Errorf("IsInteger(%v) = %v, want %v", tt.input, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIsFloat(t *testing.T) {
+	tests := []struct {
+		name  string
+		input interface{}
+		want  bool
+	}{
+		{"float32", float32(1.5), true},
+		{"float64", float64(1.5), true},
+		{"int", int(2), false},
+		{"string", "test", false},
+		{"bool", false, false},
+		{"nil", nil, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := IsFloat(tt.input)
+			if got != tt.want {
+				t.Errorf("IsFloat(%v) = %v, want %v", tt.input, got, tt.want)
+			}
+		})
+	}
 }

@@ -51,3 +51,32 @@ func IsNil(i any) bool {
 	}
 	return false
 }
+
+// IsInteger returns true if the given value is a variant of an integer type.
+func IsInteger(val interface{}) bool {
+	t := reflect.TypeOf(val)
+	if t == nil {
+		return false
+	}
+	switch t.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return true
+	default:
+		return false
+	}
+}
+
+// IsFloat returns true if the given value is a float32 or float64.
+func IsFloat(val interface{}) bool {
+	t := reflect.TypeOf(val)
+	if t == nil {
+		return false
+	}
+	switch t.Kind() {
+	case reflect.Float32, reflect.Float64:
+		return true
+	default:
+		return false
+	}
+}

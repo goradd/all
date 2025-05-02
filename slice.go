@@ -1,13 +1,14 @@
 package all
 
 import (
+	"fmt"
 	"reflect"
 )
 
-// ConvertSlice converts a slice of values to a slice of T.
+// MapSlice converts a slice of K to a slice of T.
 // This will only work if T is an interface{} type,
 // or if i contains interfaces to T.
-func ConvertSlice[T, K any](i []K) (o []T) {
+func MapSlice[T, K any](i []K) (o []T) { // T,K is in reverse order on purpose to allow K to be inferred
 	if i == nil {
 		return
 	}
@@ -20,6 +21,26 @@ func ConvertSlice[T, K any](i []K) (o []T) {
 	return o
 }
 
-func IsSlice(in any) bool {
-	return reflect.TypeOf(in).Kind() == reflect.Slice
+// MapSliceFunc converts a slice of K to a slice of T using the mapping function f.
+func MapSliceFunc[K, T any](i []K, f func(j K) T) (o []T) {
+	for _, v := range i {
+		o = append(o, f(v))
+	}
+	return o
+}
+
+// IsSlice returns true if value is a slice
+func IsSlice(value any) bool {
+	return reflect.TypeOf(value).Kind() == reflect.Slice
+}
+
+func Join[K any](values []K, sep string) (out string) {
+	if len(values) == 0 {
+		return ""
+	}
+	out = fmt.Sprint(values[0])
+	for _, v := range values[1:] {
+		out += sep + fmt.Sprint(v)
+	}
+	return
 }

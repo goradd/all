@@ -21,8 +21,8 @@ func StringMap[K cmp.Ordered](m map[K]any) (o map[K]string) {
 	return
 }
 
-// Map converts a map[K]V to a map[K]any.
-func Map[K cmp.Ordered, V any](m map[K]V) (o map[K]any) {
+// AnyMap converts a map[K]V to a map[K]any.
+func AnyMap[K cmp.Ordered, V any](m map[K]V) (o map[K]any) {
 	o = make(map[K]any, len(m))
 	for k, v := range m {
 		o[k] = v
