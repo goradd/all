@@ -1,4 +1,4 @@
-module github.com/goradd/all
+module github.com/goradd/anyutil
 
 go 1.23.2
 
