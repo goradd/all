@@ -6,15 +6,28 @@ import (
 )
 
 // MapSlice converts a slice of K to a slice of T.
-// This will only work if T is an interface{} type,
-// or if i contains interfaces to T.
+// This will only work if T is an interface{} type, i contains interfaces to T, or K is convertible to T by a type cast.
 func MapSlice[T, K any](i []K) (o []T) { // T,K is in reverse order on purpose to allow K to be inferred
+	var emptyT T
+	var emptyK K
+	var isConvertible bool
+
+	tK := reflect.TypeOf(emptyK)
+	tT := reflect.TypeOf(emptyT)
+	if tT != nil && tK != nil {
+		isConvertible = tK.ConvertibleTo(tT)
+	}
 	if i == nil {
 		return
 	}
 	v := reflect.ValueOf(i)
 	for idx := 0; idx < v.Len(); idx++ {
-		a := v.Index(idx).Interface()
+		var a any
+		if isConvertible {
+			a = v.Index(idx).Convert(tT).Interface()
+		} else {
+			a = v.Index(idx).Interface()
+		}
 		v2 := a.(T)
 		o = append(o, v2)
 	}

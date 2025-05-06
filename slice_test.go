@@ -7,7 +7,9 @@ import (
 	"testing"
 )
 
-func TestConvertSlice(t *testing.T) {
+type MyType int
+
+func TestMapSlice(t *testing.T) {
 	l1 := []string{"a", "b"}
 	var i1 []any
 	var nilSlice []any
@@ -23,6 +25,10 @@ func TestConvertSlice(t *testing.T) {
 	i3 := []any{1, 2}
 	i4 := MapSlice[int](i3)
 	assert.True(t, i4[0] == 1)
+
+	m := []MyType{1, 2}
+	m2 := MapSlice[int](m)
+	assert.True(t, m2[0] == 1)
 }
 
 func TestIsSlice(t *testing.T) {
@@ -91,4 +97,33 @@ func TestMapSliceFunc(t *testing.T) {
 			t.Errorf("expected empty result, got %v", result)
 		}
 	})
+}
+
+func BenchmarkMapSliceReflect(b *testing.B) {
+	// Setup: slice of alias type
+	input := make([]MyType, 1000)
+	for i := 0; i < len(input); i++ {
+		input[i] = MyType(i)
+	}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = MapSlice[int](input)
+	}
+}
+
+func BenchmarkManualCast(b *testing.B) {
+	// Setup: same slice
+	input := make([]MyType, 1000)
+	for i := 0; i < len(input); i++ {
+		input[i] = MyType(i)
+	}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		output := make([]int, len(input))
+		for j, v := range input {
+			output[j] = int(v)
+		}
+	}
 }
