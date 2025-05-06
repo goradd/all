@@ -1,5 +1,5 @@
 // Package any has general purpose utility functions for working with interfaces and generic types.
-package all
+package anyutil
 
 import (
 	"cmp"
